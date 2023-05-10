@@ -1,5 +1,4 @@
 #include "OculusNode.h"
-
 #include "conversions.h"
 
 OculusNode::OculusNode(const std::string& nodeName) :
@@ -9,18 +8,18 @@ OculusNode::OculusNode(const std::string& nodeName) :
 {
     node_.param<std::string>("ping_topic",       pingTopic_,      "ping");
     node_.param<std::string>("status_topic",     statusTopic_,    "status");
-    node_.param<std::string>("raw_topic",        rawTopic_,       "raw");
-    node_.param<std::string>("ping_image_topic", pingImageTopic_, "ping_image");
+    // node_.param<std::string>("raw_topic",        rawTopic_,       "raw");
+    // node_.param<std::string>("ping_image_topic", pingImageTopic_, "ping_image");
 
     pingPublisher_   = node_.advertise<oculus_sonar::Ping>        (pingTopic_,      100);
     statusPublisher_ = node_.advertise<oculus_sonar::OculusStatus>(statusTopic_,    100);
-    imagePublisher_  = node_.advertise<sensor_msgs::Image>        (pingImageTopic_, 100);
-    rawPublisher_    = node_.advertise<oculus_sonar::Raw>         (rawTopic_,       100);
+    // imagePublisher_  = node_.advertise<sensor_msgs::Image>        (pingImageTopic_, 100);
+    // rawPublisher_    = node_.advertise<oculus_sonar::Raw>         (rawTopic_,       100);
 
     node_.param<bool>("publish_without_subs", publishWithoutSubs_, false);
 
-    node_.param<std::string>("ping_topic_deprecated",  pingTopicDeprecated_,  "ping_deprecated");
-    pingPublisherDeprecated_ = node_.advertise<oculus_sonar::OculusPing>(pingTopicDeprecated_, 100);
+    // node_.param<std::string>("ping_topic_deprecated",  pingTopicDeprecated_,  "ping_deprecated");
+    // pingPublisherDeprecated_ = node_.advertise<oculus_sonar::OculusPing>(pingTopicDeprecated_, 100);
 
     sonar_.add_ping_callback(   std::bind(&OculusNode::ping_callback,
                                           this, std::placeholders::_1));
@@ -65,14 +64,14 @@ void OculusNode::ping_callback(const oculus::PingMessage::ConstPtr& ping)
     oculus::copy_to_ros(msg, ping);
     pingPublisher_.publish(msg);
 
-    if(imagePublisher_.getNumSubscribers() > 0) {
-        sensor_msgs::Image img;
-        oculus::copy_to_ros(img, ping);
-        imagePublisher_.publish(img);
-    }
+    // if(imagePublisher_.getNumSubscribers() > 0) {
+    //     sensor_msgs::Image img;
+    //     oculus::copy_to_ros(img, ping);
+    //     imagePublisher_.publish(img);
+    // }
 
     // This method is deprecated and will be removed in future release.
-    this->publish_deprecated(ping);
+    // this->publish_deprecated(ping);
 }
 
 void OculusNode::publish_deprecated(const oculus::PingMessage::ConstPtr& ping)
@@ -106,9 +105,9 @@ void OculusNode::status_callback(const OculusStatusMsg& status)
 
 void OculusNode::message_callback(const oculus::Message::ConstPtr& msg)
 {
-    oculus_sonar::Raw rosMsg;
-    oculus::copy_to_ros(rosMsg, msg);
-    rawPublisher_.publish(rosMsg);
+    //oculus_sonar::Raw rosMsg;
+    //oculus::copy_to_ros(rosMsg, msg);
+    //rawPublisher_.publish(rosMsg);
 }
 
 void OculusNode::reconfigure_callback(oculus_sonar::OculusSonarConfig& config,
@@ -199,5 +198,3 @@ void OculusNode::dummy_callback(const OculusMessageHeader& msg)
         sonar_.resume();
     }
 }
-
-

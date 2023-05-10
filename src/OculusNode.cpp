@@ -134,24 +134,24 @@ void OculusNode::reconfigure_callback(oculus_sonar::OculusSonarConfig& config,
     currentConfig.flags = 0x01  // always in meters
                         | 0x04  // force send gain to true
                         | 0x08; // use simple ping
-    switch(config.data_depth)
-    {
-        case oculus_sonar::OculusSonar_8bits:
-            break;
-        case oculus_sonar::OculusSonar_16bits:
-            currentConfig.flags |= 0x02;
-            break;
-        default:break;
-    }
-    switch(config.nbeams)
-    {
-        case oculus_sonar::OculusSonar_256beams:
-            break;
-        case oculus_sonar::OculusSonar_512beams:
-            currentConfig.flags |= 0x40;
-            break;
-        default:break;
-    }
+    // switch(config.data_depth)
+    // {
+    //     case oculus_sonar::OculusSonar_8bits:
+    //         break;
+    //     case oculus_sonar::OculusSonar_16bits:
+    //         currentConfig.flags |= 0x02;
+    //         break;
+    //     default:break;
+    // }
+    // switch(config.nbeams)
+    // {
+    //     case oculus_sonar::OculusSonar_256beams:
+    //         break;
+    //     case oculus_sonar::OculusSonar_512beams:
+    //         currentConfig.flags |= 0x40;
+    //         break;
+    //     default:break;
+    // }
     //if(config.send_gain)
     //    currentConfig.flags |= 0x04;
     if(config.gain_assist)
@@ -172,11 +172,11 @@ void OculusNode::reconfigure_callback(oculus_sonar::OculusSonarConfig& config,
     auto feedback = sonar_.request_ping_config(currentConfig);
     config.frequency_mode   = feedback.masterMode;
     //config.ping_rate      = feedback.pingRate // is broken (?) sonar side
-    config.data_depth       = (feedback.flags & 0x02) ? 1 : 0;
+    // config.data_depth       = (feedback.flags & 0x02) ? 1 : 0;
     config.send_gain        = (feedback.flags & 0x04) ? 1 : 0;
     //config.full_ping        = (feedback.flags & 0x08) ? 1 : 0;
     config.gain_assist      = (feedback.flags & 0x10) ? 1 : 0;
-    config.nbeams           = (feedback.flags & 0x40) ? 1 : 0;
+    // config.nbeams           = (feedback.flags & 0x40) ? 1 : 0;
     config.range            = feedback.range;
     config.gamma_correction = feedback.gammaCorrection;
     config.gain_percent     = feedback.gainPercent;

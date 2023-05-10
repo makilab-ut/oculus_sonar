@@ -110,15 +110,17 @@ void OculusNode::reconfigure_callback(oculus_sonar::OculusSonarConfig& config,
     oculus::SonarDriver::PingConfig currentConfig;
     std::memset(&currentConfig, 0, sizeof(currentConfig));
 
+
     currentConfig.masterMode = config.frequency_mode;
+    int ping_rate;
     switch(config.ping_rate)
     {
-        case 0: currentConfig.pingRate = pingRateNormal;  break;
-        case 1: currentConfig.pingRate = pingRateHigh;    break;
-        case 2: currentConfig.pingRate = pingRateHighest; break;
-        case 3: currentConfig.pingRate = pingRateLow;     break;
-        case 4: currentConfig.pingRate = pingRateLowest;  break;
-        case 5: currentConfig.pingRate = pingRateStandby; break;
+        case 0: currentConfig.pingRate = pingRateNormal;  ping_rate = 10; break;
+        case 1: currentConfig.pingRate = pingRateHigh;    ping_rate = 15; break;
+        case 2: currentConfig.pingRate = pingRateHighest; ping_rate = 40; break;
+        case 3: currentConfig.pingRate = pingRateLow;     ping_rate =  5; break;
+        case 4: currentConfig.pingRate = pingRateLowest;  ping_rate =  2; break;
+        case 5: currentConfig.pingRate = pingRateStandby; ping_rate =  0; break;
         default:break;
     }
 
@@ -175,6 +177,11 @@ void OculusNode::reconfigure_callback(oculus_sonar::OculusSonarConfig& config,
     config.gain_percent     = feedback.gainPercent;
     config.sound_speed      = feedback.speedOfSound;
     config.salinity         = feedback.salinity;
+
+    ROS_INFO("---Sonar Config Updated ---");
+    ROS_INFO("Frequency: %d kHz", currentConfig.masterMode*450+300);
+    ROS_INFO("Range    : %f m", currentConfig.range);
+    ROS_INFO("PingRate : %d Hz", ping_rate);
 }
 
 bool OculusNode::has_ping_subscribers() const

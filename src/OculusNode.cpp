@@ -12,8 +12,8 @@ OculusNode::OculusNode(const std::string& nodeName) :
     // node_.param<std::string>("ping_image_topic", pingImageTopic_, "ping_image");
     // node_.param<std::string>("ping_topic_deprecated",  pingTopicDeprecated_,  "ping_deprecated");
 
-    pingPublisher_   = node_.advertise<oculus_sonar::Ping>        (pingTopic_,      100);
-    statusPublisher_ = node_.advertise<oculus_sonar::OculusStatus>(statusTopic_,    100);
+    pingPublisher_   = node_.advertise<oculus_sonar::Ping>        (pingTopic_,      1);
+    statusPublisher_ = node_.advertise<oculus_sonar::OculusStatus>(statusTopic_,    1);
     // imagePublisher_  = node_.advertise<sensor_msgs::Image>        (pingImageTopic_, 100);
     // rawPublisher_    = node_.advertise<oculus_sonar::Raw>         (rawTopic_,       100);
     // pingPublisherDeprecated_ = node_.advertise<oculus_sonar::OculusPing>(pingTopicDeprecated_, 100);

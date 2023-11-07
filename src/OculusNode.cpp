@@ -1,5 +1,10 @@
 #include "OculusNode.h"
 #include "conversions.h"
+#include <ros/ros.h>
+
+ros::Time last_ping_time_;
+int ping_count_;
+double total_time_elapsed_;
 
 OculusNode::OculusNode(const std::string& nodeName) :
     node_(nodeName),
@@ -54,18 +59,27 @@ void OculusNode::ping_callback(const oculus::PingMessage::ConstPtr& ping)
         sonar_.standby();
     }
 
+    // Calculate the time since the last callback
+    ros::Time now = ros::Time::now();
+    if (!last_ping_time_.isZero()) { // Skip the first callback since there's no previous time
+        ros::Duration time_diff = now - last_ping_time_;
+        total_time_elapsed_ += time_diff.toSec();
+        ping_count_++;
+        if (ping_count_ >= 10) { // Log every 10 messages, for example
+            double frequency = static_cast<double>(ping_count_) / total_time_elapsed_;
+            ROS_INFO_STREAM("Ping publish frequency: " << frequency << " Hz");
+            // Reset counters
+            ping_count_ = 0;
+            total_time_elapsed_ = 0.0;
+        }
+    }
+    last_ping_time_ = now;
+
     oculus_sonar::Ping msg;
     oculus::copy_to_ros(msg, ping);
     pingPublisher_.publish(msg);
 
-    // if(imagePublisher_.getNumSubscribers() > 0) {
-    //     sensor_msgs::Image img;
-    //     oculus::copy_to_ros(img, ping);
-    //     imagePublisher_.publish(img);
-    // }
 
-    // This method is deprecated and will be removed in future release.
-    // this->publish_deprecated(ping);
 }
 
 void OculusNode::publish_deprecated(const oculus::PingMessage::ConstPtr& ping)

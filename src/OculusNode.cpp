@@ -28,7 +28,7 @@ OculusNode::OculusNode(const std::string& nodeName) :
     sonar_.add_ping_callback(std::bind(&OculusNode::ping_callback,this, std::placeholders::_1));
     sonar_.add_message_callback(std::bind(&OculusNode::message_callback,this, std::placeholders::_1));
     sonar_.add_status_callback(std::bind(&OculusNode::status_callback,this, std::placeholders::_1));
-    sonar_.add_dummy_callback(std::bind(&OculusNode::dummy_callback,this, std::placeholders::_1));
+    //sonar_.add_dummy_callback(std::bind(&OculusNode::dummy_callback,this, std::placeholders::_1));
     this->start();
 
     configServer_.setCallback(std::bind(&OculusNode::reconfigure_callback, this,std::placeholders::_1, std::placeholders::_2));

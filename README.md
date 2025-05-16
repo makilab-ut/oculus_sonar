@@ -18,7 +18,7 @@ cd <your catkin workspace>/src
 
 Clone with repository.
 ```
-git clone https://github.com/ENSTABretagneRobotics/oculus_ros.git
+git clone https://github.com/makilab-ut/oculus_sonar
 ```
 
 Build the oculus_sonar ROS node:
@@ -32,51 +32,6 @@ rosrun oculus_sonar oculus_sonar_node
 ```
 
 All set !
-
-
-
-### Installation (without an internet connection)
-
-#### Install the oculus_driver library
-
-If you don't have an internet connection available on the system on which you
-want to use this node, your have to install the
-[oculus_driver](https://github.com/ENSTABretagneRobotics/oculus_driver.git)
-library beforehand.
-
-Clone or copy the oculus_driver library :
-```
-git clone https://github.com/ENSTABretagneRobotics/oculus_driver.git
-```
-
-This library follows a standard CMake compilation procedure. cd into the repo
-and create a build directory :
-
-```
-cd oculus_driver && mkdir build && cd build
-```
-
-Generate your build system with CMake, compile and install :
-```
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<your install location> ..
-make -j4 install
-```
-
-Make sure the CMAKE_PREFIX_PATH environment variable contains your install
-location :
-```
-echo $CMAKE_PREFIX_PATH
-```
-
-If not, put this at the end your $HOME/.bashrc file:
-```
-export CMAKE_PREFIX_PATH=<your install location>:$CMAKE_PREFIX_PATH
-```
-
-Now follow the oculus_ros node installation procedure normally. If the
-oculus_driver is properly installed **at a location included in the
-CMAKE_PREFIX_PATH environment variable**. The node should compile properly.
-
 
 
 ## How it works (in brief)
